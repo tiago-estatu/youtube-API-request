@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <title>Exemplo: Listando vídeos de canais do YouTube</title>
+
+	<!-- Favicons Start -->
+
+	<!-- In case image.ico -->
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"  />
+
+	<!-- In case image.png -->
+	<link rel="shortcut icon" type="image/png" href="favicon.png" />
+
+	<!-- Favicons End -->
+
+	<!-- CSS Start -->
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- CSS End -->
+
+	<!-- HTML5 Support for old ie browsers -->
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
+
+    <style>
+        body, html{
+            margin: 0;
+            padding: 0;
+        }
+        #content{
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .video-item{
+            display: block;
+            float: left;            
+            width: 50%;
+        }
+        .video-item a{
+            text-decoration: none;
+            color: black;
+        }
+        .video-item a:hover{
+            text-decoration: underline;
+            opacity: 0.7;
+        }
+        .video-item img, .video-item p, .video-item h2{
+            width: 100%;
+            height: auto;
+        }
+        .video-item .content{
+            padding: 5px;
+        }
+        h1{
+            text-align: center;
+        }
+        h2{
+            font-size: 10px;
+        }
+    </style>    
+    <!-- Check if jQuery already exists --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="content">
+        <h1>Listagem vídeos canal do YouTube</h1>
+        <div id="container"></div>
+    </div>    
+    <script type="text/javascript">
+        //cria uma lista com os videos do canal especificado
+        function funcaoCallback(json){
+            var videos = json.items; //array com os v�deos
+            var youtubeUrl = 'https://www.youtube.com/watch?v='; //padrao de URL do YouTube
+            var output_html = "";
+            for(i = 0; i < videos.length; i++){
+                output_html += "<div class=\"video-item\">";
+                output_html += "<div class=\"content\">";
+                output_html += "<a href=\"" + youtubeUrl + videos[i].id.videoId + "\">";
+                output_html += "<img src=\""+ videos[i].snippet.thumbnails.medium.url+"\" width=\"" 
+                                            + videos[i].snippet.thumbnails.medium.width + "\" height=\"" 
+                                            + videos[i].snippet.thumbnails.medium.height +"\"/>";
+                output_html += "<h2>";                
+                output_html += videos[i].snippet.title.substr(0, 70);
+                output_html += "</h2>";
+                output_html += "<p>";
+                output_html += videos[i].snippet.description.substr(0, 90);
+                output_html += "</p>";
+                output_html += "</a>";
+                output_html += "</div>";
+                output_html += "</div>";
+            }
+            document.getElementById("container").innerHTML = output_html;
+        }        
+    </script>
+    <script async src="https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&channelId=UCZLFY-N0R2ZUT7ljqyA7C9A&key=AIzaSyDREEq6vLsuMwg0qiZnzOwTodr4eN2mYRY&maxResults=6&type=video&order=date&fields=items(id(videoId)%2Csnippet(title%2Cdescription%2Cthumbnails(medium)))&prettyPrint=false&callback=funcaoCallback"></script>
+
+</body>
+</html>
